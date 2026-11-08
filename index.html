@@ -325,14 +325,14 @@
 <section id="vector">
   <h2>06 <span>//</span> attack vector <span>(as reported, not yet a full post-mortem)</span></h2>
   <div class="flow">
-    <div class="step"><div class="n">STAGE 01</div><div class="ttl">Recruitment lure</div><div class="b">A Binance software engineer is contacted by "a person posing as a Project Director" via a job platform, with fake interviews and video calls.</div></div>
-    <div class="step"><div class="n">STAGE 02</div><div class="ttl">Malware on workstation</div><div class="b">Malicious code gives remote access to the engineer's laptop, with the ability to deploy software.</div></div>
-    <div class="step"><div class="n">STAGE 03</div><div class="ttl">Internal AI tool abused</div><div class="b">A compromised internal AI tool is reportedly used to reach the wallet-signing service.</div></div>
-    <div class="step warn"><div class="n">STAGE 04</div><div class="ttl">Hot-wallet authority abused</div><div class="b">Attackers grant network permissions directly on Ethereum (EIP-7702 delegation, per CEO Richard Teng via BBC), so halting withdrawals did not stop the drain.</div></div>
-    <div class="step warn"><div class="n">STAGE 05</div><div class="ttl">Multi-chain drain</div><div class="b">~20 min across 10 chains; ~12,000 wallets used to dilute freezes.</div></div>
+    <div class="step"><div class="n">STAGE 01 · SEPT (reported)</div><div class="ttl">Recruitment lure</div><div class="b">Attackers posing as recruiters trick a Binance software engineer into running a malicious file disguised as a coding assignment. Reported by Cointelegraph and Metrika.</div></div>
+    <div class="step"><div class="n">STAGE 02 · reported</div><div class="ttl">Workstation pivot</div><div class="b">From the infected laptop, attackers use an internal AI tool to reach two more engineers' systems and obtain deployment credentials. How the AI tool enabled this is not explained by Binance.</div></div>
+    <div class="step warn"><div class="n">STAGE 03 · reported</div><div class="ttl">Signing service reached</div><div class="b">Stolen deployment access runs a container under stolen credentials; attackers obtain a container-deployment token and use Binance's own wallet-signing service to send funds outside normal withdrawals. One write-up says no private key leaked; the internal system signed the transactions.</div></div>
+    <div class="step warn"><div class="n">STAGE 04 · 29 OCT</div><div class="ttl">Hot-wallet authority abused</div><div class="b">Attackers grant network permissions directly on Ethereum (EIP-7702 delegation, per CEO Richard Teng via BBC), so halting withdrawals did not stop the drain.</div></div>
+    <div class="step warn"><div class="n">STAGE 05 · 29 OCT</div><div class="ttl">Multi-chain drain</div><div class="b">~20 min across 10 chains; ~12,000 wallets used to dilute freezes.</div></div>
   </div>
   <div class="warnbox" style="margin-top:14px">
-    Binance says its investigation "uncovered additional points of breach" beyond the initial laptop. TRM Labs says preparation started at least 36 hours before the theft. No full technical post-mortem has been published as of this writing. Treat the stages above as reported, not confirmed.
+    Binance says its investigation "uncovered additional points of breach" beyond the initial laptop. Start dates differ: reporting places the initial lure in September, one headline says attackers were inside "8 weeks in advance," and TRM Labs says preparation started at least 36 hours before the theft. The damage (the drain) started on 29 October; the intrusion started earlier. No full technical post-mortem has been published as of this writing. Treat the stages above as reported, not confirmed.
   </div>
 </section>
 
@@ -485,6 +485,10 @@
     <li><div><a href="https://eips.ethereum.org/EIPS/eip-7702" target="_blank" rel="noopener">EIP-7702: Set Code for EOAs — Ethereum Improvement Proposals</a><span class="ok">READ</span><span class="meta">Source for the constants, tuple format and processing rules in section 06b.</span></div></li>
     <li><div><a href="https://blog.gopluslabs.io/2025/06/03/financing/2025-06-03-Understanding-EIP-7702-Phishing-Attacks-A-Comprehensive-Guide-to-Protection-Strategies-for-Wallets" target="_blank" rel="noopener">Understanding EIP-7702 Phishing Attacks — GoPlus Labs, 3 Jun 2025</a><span class="flag">SEARCH</span><span class="meta">Vendor source; phishing mechanics and mitigations.</span></div></li>
     <li><div><a href="https://www.blockworks.com/news/ethereum-smart-wallet-mode-pectra-panic-unpacked" target="_blank" rel="noopener">Ethereum smart wallet mode panic, unpacked — Blockworks</a><span class="flag">SEARCH</span><span class="meta">Argues the phishing risk is exaggerated.</span></div></li>
+    <li><div><a href="https://cointelegraph.com/news/binance-fake-job-interviews-compromised-ai-tool-hack" target="_blank" rel="noopener">Binance Details Security Failures Behind Record $6.3B Crypto Hack — Cointelegraph</a><span class="flag">SEARCH</span><span class="meta">Post-mortem write-up: fake job interviews, AI tool, signing service.</span></div></li>
+    <li><div><a href="https://www.metrika.co/blog/binance-post-mortem-10-29-p1" target="_blank" rel="noopener">Post Mortem: the Binance Theft Through an Operational Risk Lens — Metrika</a><span class="flag">SEARCH</span><span class="meta">Secondary analysis of the post-mortem, including container and token detail.</span></div></li>
+    <li><div><a href="https://tangem.com/en/blog/post/binance-hack-2026-how-it-happened/" target="_blank" rel="noopener">Inside the Binance $6.34B Hack: What the Post-Mortem Shows — Tangem</a><span class="flag">SEARCH</span><span class="meta">Secondary analysis; not the primary post-mortem.</span></div></li>
+    <li><div><a href="https://finance.biggo.com/news/37ee61cd-bd6c-46ea-80fa-b43143854132" target="_blank" rel="noopener">Binance Hack: Attackers Infiltrated Internally 8 Weeks in Advance — BigGo Finance</a><span class="flag">SEARCH</span><span class="meta">Source for the "8 weeks" start claim.</span></div></li>
   </ol>
 </section>
 
