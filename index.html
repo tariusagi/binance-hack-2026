@@ -142,6 +142,7 @@
     <a href="#funds">04 fund status</a>
     <a href="#recovery">05 recovery</a>
     <a href="#vector">06 attack vector</a>
+    <a href="#eip7702">06b eip-7702</a>
     <a href="#attrib">07 attribution</a>
     <a href="#discrep">08 discrepancies</a>
     <a href="#sources">09 sources</a>
@@ -335,6 +336,82 @@
   </div>
 </section>
 
+<!-- 06b EIP-7702 -->
+<section id="eip7702">
+  <h2>06b <span>//</span> EIP-7702 <span>(the mechanism named in the reporting)</span></h2>
+  <div class="grid two">
+    <div class="card">
+      <h3>What it is</h3>
+      <p>EIP-7702 is an Ethereum core standard (status: Final, created 7 May 2024) that lets a normal key-controlled account, an <b>externally owned account (EOA)</b>, temporarily run smart-contract code. Before it, an EOA had no code: a single private-key signature was the only way to authorise its actions. The spec adds a new transaction type, <b>0x04</b>, carrying an <b>authorization list</b>. Each entry tells the chain "this account's code is now the code at address X".</p>
+      <p class="note">The spec page does not name an activation fork. EIP-7702 is commonly associated with the Pectra upgrade in 2025; verify against the spec's network-upgrade notes before relying on that date.</p>
+    </div>
+    <div class="card">
+      <h3>Authorization tuple</h3>
+      <table>
+        <tbody>
+          <tr><td>chain_id</td><td>a specific chain, or <b>0 = valid on any chain</b></td></tr>
+          <tr><td>address</td><td>contract whose code the EOA will adopt</td></tr>
+          <tr><td>nonce</td><td>must match the EOA's nonce, then increments</td></tr>
+          <tr><td>y_parity, r, s</td><td>signature by the EOA's own key</td></tr>
+        </tbody>
+      </table>
+      <p class="note">The signature covers keccak256(0x05 || rlp([chain_id, address, nonce])). Anyone who obtains a valid tuple can submit it in their own transaction, and the sender pays the gas.</p>
+    </div>
+  </div>
+  <div class="grid two" style="margin-top:14px">
+    <div class="card">
+      <h3>Key constants</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Name</th><th class="num">Value</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td>SET_CODE_TX_TYPE</td><td class="num">0x04</td><td>new transaction type</td></tr>
+            <tr><td>MAGIC</td><td class="num">0x05</td><td>prefix for signed authorization hash</td></tr>
+            <tr><td>PER_AUTH_BASE_COST</td><td class="num">12,500</td><td>gas per tuple</td></tr>
+            <tr><td>PER_EMPTY_ACCOUNT_COST</td><td class="num">25,000</td><td>gas charged per tuple, refund on use</td></tr>
+            <tr><td>Delegation indicator</td><td class="num">0xef0100 + address</td><td>23-byte code the EVM follows</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Processing rules (as specified)</h3>
+      <ul style="margin:0;padding-left:18px;color:var(--text)">
+        <li>Tuples are checked one by one. Invalid tuples are skipped; if an address appears twice, the last valid entry wins.</li>
+        <li>The account must have empty code or an existing delegation. Accounts with other code cannot delegate.</li>
+        <li>A failed transaction does <b>not</b> undo delegations already processed.</li>
+        <li>The sender pays for every tuple, valid or not.</li>
+        <li><b>Revocation:</b> delegating to the zero address clears the indicator and restores empty code.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h3>Why it matters for this incident</h3>
+    <p>Once an attacker holds a valid signature from a hot-wallet key, they can make that address run attacker-chosen code. That code can move every asset the account controls, on every chain where the tuple is accepted. Stopping withdrawals in Binance's own system does not block this, because the authority sits on-chain: this matches Binance's account that halting withdrawals did not stop the drain (see 06).</p>
+    <div class="warnbox" style="margin-top:10px">
+      <b>Correction to the reporting:</b> the Wikipedia summary attributes a "multi-signature protocol called EIP-7702" to CEO Richard Teng (via BBC). EIP-7702 is not a multisig protocol. It is account-code delegation: one valid key signature can grant an address a contract's behaviour. Whether the attackers used a wildcard chain_id, a particular delegate contract, or a pre-signed tuple has not been published in a full post-mortem.
+    </div>
+  </div>
+  <div class="grid two" style="margin-top:14px">
+    <div class="card">
+      <h3>Phishing and drainer risk</h3>
+      <p>The spec has no phishing section. Its rationale says applications must not ask users to sign authorisations, and that "there is no safe way to provide this interface" because few users can verify the code they delegate to.</p>
+      <p>Reported post-Pectra uses by drainers: a MetaMask user lost about $146.6K on 24 May 2025 to a batched EIP-7702 transaction tied to Inferno Drainer, and Scam Sniffer reported two large cases in August 2025. Other reporting argues the risk is overstated, since the attacker still needs a signature, and that the real gap is wallets that show the signature as generic.</p>
+      <p class="note">Sources differ on scale. The vendor-sourced figures are not independently audited.</p>
+    </div>
+    <div class="card">
+      <h3>Practical safeguards</h3>
+      <ul style="margin:0;padding-left:18px;color:var(--text)">
+        <li>Never sign an authorisation request you cannot read: check the target address and the chain.</li>
+        <li>Be wary of any tuple with chain_id 0, which works across all chains.</li>
+        <li>Wallets should display the delegate contract and nonce, and simulate it before signing.</li>
+        <li>Operators of hot wallets should treat every signing key as one that can hand over full control, and monitor delegation indicators on their accounts.</li>
+        <li>To remove a delegation, send a new authorisation pointing to the zero address.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <!-- 07 attribution -->
 <section id="attrib">
   <h2>07 <span>//</span> attribution</h2>
@@ -405,6 +482,9 @@
     <li><div><a href="http://kcna.kp/en/article/detail/873496f71f6ab3e667a4271b5a4cf4c6" target="_blank" rel="noopener">KCNA: Kim Yo Jong statement — 3 Nov 2026</a><span class="flag">UNVERIFIED</span><span class="meta">Cited by Wikipedia; not opened.</span></div></li>
     <li><div><a href="https://nairametrics.com/2026/11/08/binance-cfo-resigns-following-6-3-billion-cryptocurrency-hack/" target="_blank" rel="noopener">Binance CFO resigns following $6.3 billion cryptocurrency hack — Nairametrics, 8 Nov 2026</a><span class="flag">SEARCH</span></div></li>
     <li><div><a href="https://thehackernews.com/2026/10/binance-suffers-security-breach.html" target="_blank" rel="noopener">Binance Suffers Security Breach Affecting $6.3 Billion in Assets — The Hacker News, Oct 2026</a><span class="flag">UNVERIFIED</span><span class="meta">Retrieval returned HTTP 403; not read.</span></div></li>
+    <li><div><a href="https://eips.ethereum.org/EIPS/eip-7702" target="_blank" rel="noopener">EIP-7702: Set Code for EOAs — Ethereum Improvement Proposals</a><span class="ok">READ</span><span class="meta">Source for the constants, tuple format and processing rules in section 06b.</span></div></li>
+    <li><div><a href="https://blog.gopluslabs.io/2025/06/03/financing/2025-06-03-Understanding-EIP-7702-Phishing-Attacks-A-Comprehensive-Guide-to-Protection-Strategies-for-Wallets" target="_blank" rel="noopener">Understanding EIP-7702 Phishing Attacks — GoPlus Labs, 3 Jun 2025</a><span class="flag">SEARCH</span><span class="meta">Vendor source; phishing mechanics and mitigations.</span></div></li>
+    <li><div><a href="https://www.blockworks.com/news/ethereum-smart-wallet-mode-pectra-panic-unpacked" target="_blank" rel="noopener">Ethereum smart wallet mode panic, unpacked — Blockworks</a><span class="flag">SEARCH</span><span class="meta">Argues the phishing risk is exaggerated.</span></div></li>
   </ol>
 </section>
 
