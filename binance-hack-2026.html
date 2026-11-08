@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Binance Hack 2026 — $6.3B Incident Dossier</title>
+<meta name="description" content="Interactive dossier on the October 29, 2026 Binance hack: ~$6.3B stolen, timeline, chain breakdown, fund status, recovery, attribution and sources.">
+<style>
+  :root {
+    --bg: #05080a;
+    --panel: #0a1116;
+    --panel-2: #0d171e;
+    --line: #15303a;
+    --text: #b7f7d0;
+    --dim: #5d8a78;
+    --accent: #39ff88;
+    --accent-2: #00d4ff;
+    --warn: #ffb000;
+    --danger: #ff3b5c;
+    --font: "Cascadia Code", "Consolas", "Fira Code", "JetBrains Mono", ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) { --bg: #05080a; }
+  }
+  :root[data-theme="dark"] { --bg: #05080a; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.55; }
+  body {
+    background-image:
+      linear-gradient(rgba(57,255,136,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(57,255,136,0.035) 1px, transparent 1px);
+    background-size: 28px 28px;
+    background-attachment: fixed;
+  }
+  body::after {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 99;
+    background: repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0 2px, rgba(0,0,0,0.12) 2px 3px);
+  }
+  a { color: var(--accent-2); text-decoration: none; border-bottom: 1px dotted var(--accent-2); }
+  a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px 60px; }
+  header.top {
+    border-bottom: 1px solid var(--line); padding: 28px 0 18px; margin-bottom: 26px;
+    background: linear-gradient(180deg, rgba(57,255,136,0.06), transparent);
+  }
+  .tag { color: var(--dim); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+  h1 { font-size: clamp(22px, 4vw, 34px); margin: 6px 0 8px; color: var(--accent); text-shadow: 0 0 12px rgba(57,255,136,.35); }
+  h1 .glitch { color: var(--danger); }
+  .sub { color: var(--dim); max-width: 780px; }
+  .blink::after { content: "_"; animation: blink 1s steps(2, start) infinite; color: var(--accent); }
+  @keyframes blink { to { visibility: hidden; } }
+  nav.toc { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  nav.toc a { border: 1px solid var(--line); padding: 4px 10px; color: var(--dim); border-bottom: 1px solid var(--line); }
+  nav.toc a:hover { color: var(--accent); border-color: var(--accent); }
+  section { margin: 34px 0; }
+  section > h2 {
+    font-size: 16px; text-transform: uppercase; letter-spacing: .12em; color: var(--accent);
+    border-left: 3px solid var(--accent); padding-left: 10px; margin: 0 0 14px;
+  }
+  section > h2 span { color: var(--dim); font-weight: normal; }
+  .grid { display: grid; gap: 14px; }
+  .kpis { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+  .card {
+    background: var(--panel); border: 1px solid var(--line); padding: 14px 16px; position: relative;
+  }
+  .card::before { content: ""; position: absolute; top: -1px; left: -1px; width: 10px; height: 10px; border-top: 2px solid var(--accent); border-left: 2px solid var(--accent); }
+  .kpi .v { font-size: 26px; color: var(--accent); text-shadow: 0 0 10px rgba(57,255,136,.3); }
+  .kpi .v.warn { color: var(--warn); text-shadow: 0 0 10px rgba(255,176,0,.3); }
+  .kpi .v.danger { color: var(--danger); text-shadow: 0 0 10px rgba(255,59,92,.3); }
+  .kpi .l { color: var(--dim); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+  .kpi .n { color: var(--dim); font-size: 12px; margin-top: 4px; }
+  .two { grid-template-columns: 1fr 1fr; }
+  @media (max-width: 800px) { .two { grid-template-columns: 1fr; } }
+  .card h3 { margin: 0 0 10px; font-size: 13px; color: var(--accent-2); text-transform: uppercase; letter-spacing: .08em; }
+  .note { color: var(--dim); font-size: 12px; margin-top: 8px; }
+  svg text { font-family: var(--font); }
+  .tip {
+    position: fixed; pointer-events: none; background: #020406; border: 1px solid var(--accent);
+    color: var(--text); padding: 6px 9px; font-size: 12px; opacity: 0; transition: opacity .12s; z-index: 100; max-width: 260px;
+    box-shadow: 0 0 14px rgba(57,255,136,.25);
+  }
+  .tip.on { opacity: 1; }
+  /* timeline */
+  .timeline { position: relative; padding-left: 22px; border-left: 1px dashed var(--line); }
+  .ev { position: relative; margin: 0 0 12px; padding: 10px 14px; background: var(--panel); border: 1px solid var(--line); cursor: pointer; }
+  .ev::before { content: ""; position: absolute; left: -28px; top: 14px; width: 9px; height: 9px; background: var(--bg); border: 2px solid var(--accent); }
+  .ev.hot::before { border-color: var(--danger); box-shadow: 0 0 8px var(--danger); }
+  .ev:hover { border-color: var(--accent); }
+  .ev .t { color: var(--accent-2); font-size: 12px; }
+  .ev .h { color: var(--text); font-weight: bold; }
+  .ev .d { display: none; color: var(--dim); margin-top: 6px; }
+  .ev.open .d { display: block; }
+  .ev .d p { margin: 4px 0; }
+  .ev .hint { float: right; color: var(--dim); font-size: 11px; }
+  /* controls */
+  .btns { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .btns button {
+    background: transparent; color: var(--dim); border: 1px solid var(--line); padding: 4px 10px;
+    font-family: var(--font); font-size: 12px; cursor: pointer;
+  }
+  .btns button.on, .btns button:hover { color: var(--accent); border-color: var(--accent); }
+  /* table */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--accent-2); font-weight: normal; text-transform: uppercase; font-size: 11px; letter-spacing: .08em; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--line); background: var(--panel); }
+  .bar-h { height: 8px; background: var(--panel-2); position: relative; min-width: 120px; }
+  .bar-h i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+  /* flow */
+  .flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0; }
+  .step { border: 1px solid var(--line); background: var(--panel); padding: 12px; position: relative; }
+  .step .n { color: var(--accent); font-size: 11px; }
+  .step .ttl { color: var(--text); font-weight: bold; margin: 2px 0 4px; }
+  .step .b { color: var(--dim); font-size: 12px; }
+  .step.warn { border-color: var(--warn); }
+  .step.warn .n { color: var(--warn); }
+  /* sources */
+  ol.src { padding-left: 0; list-style: none; counter-reset: s; }
+  ol.src li { counter-increment: s; padding: 8px 10px; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 48px 1fr; gap: 8px; }
+  ol.src li::before { content: "[" counter(s) "]"; color: var(--accent); }
+  ol.src .meta { color: var(--dim); font-size: 12px; display: block; }
+  .flag { color: var(--warn); font-size: 11px; border: 1px solid var(--warn); padding: 0 5px; margin-left: 6px; }
+  .ok { color: var(--accent); font-size: 11px; border: 1px solid var(--accent); padding: 0 5px; margin-left: 6px; }
+  .warnbox { border: 1px solid var(--warn); background: rgba(255,176,0,.05); padding: 12px 14px; color: #ffd98a; }
+  footer { border-top: 1px solid var(--line); margin-top: 40px; padding-top: 14px; color: var(--dim); font-size: 12px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--dim); margin-top: 8px; }
+  .legend b { display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="tag">// incident dossier · exchange compromise · 2026-10-29 → present</div>
+  <h1>BINANCE <span class="glitch">$6.3B</span> HACK<span class="blink"></span></h1>
+  <div class="sub">A structured, source-linked breakdown of the largest cryptocurrency theft on record: how it happened, where the money went, what was frozen, how Binance responded, and who is suspected. Charts are interactive: hover, click, toggle.</div>
+  <nav class="toc">
+    <a href="#kpi">01 overview</a>
+    <a href="#timeline">02 timeline</a>
+    <a href="#chains">03 chains</a>
+    <a href="#funds">04 fund status</a>
+    <a href="#recovery">05 recovery</a>
+    <a href="#vector">06 attack vector</a>
+    <a href="#attrib">07 attribution</a>
+    <a href="#discrep">08 discrepancies</a>
+    <a href="#sources">09 sources</a>
+  </nav>
+</header>
+
+<!-- 01 KPIs -->
+<section id="kpi">
+  <h2>01 <span>//</span> overview</h2>
+  <div class="grid kpis">
+    <div class="card kpi"><div class="l">Stolen</div><div class="v danger">~$6.3B</div><div class="n">range reported: $6.3B–$6.4B</div></div>
+    <div class="card kpi"><div class="l">Frozen</div><div class="v warn">~$3.0B</div><div class="n">mainly USDT / USDC stablecoins</div></div>
+    <div class="card kpi"><div class="l">Attack window</div><div class="v">~20 min</div><div class="n">29 Oct 2026, ~8:05–8:20 p.m. UTC</div></div>
+    <div class="card kpi"><div class="l">Blockchains</div><div class="v">10</div><div class="n">drained; 15 reopened for withdrawals</div></div>
+    <div class="card kpi"><div class="l">Reimbursed</div><div class="v">90–98%</div><div class="n">company-reported, per Binance</div></div>
+    <div class="card kpi"><div class="l">Prior record</div><div class="v">$1.5B</div><div class="n">Bybit, Feb 2025 (~4× smaller)</div></div>
+  </div>
+  <p class="note">Figures are the most-cited values at time of writing; see section 08 for where sources disagree.</p>
+</section>
+
+<!-- 02 timeline -->
+<section id="timeline">
+  <h2>02 <span>//</span> timeline <span>(click events to expand)</span></h2>
+  <div class="timeline">
+    <div class="ev hot" onclick="this.classList.toggle('open')">
+      <span class="hint">[+] details</span>
+      <div class="t">29 OCT 2026 · ~20:05–20:20 UTC</div>
+      <div class="h">Drain begins on XRP Ledger, then Ethereum and Bitcoin</div>
+      <div class="d">
+        <p>TRM Labs dates the start to ~8:05 p.m. UTC on the XRP Ledger; Chainalysis puts it at ~8:20 p.m. UTC. Roughly 20 minutes of activity moved assets off Binance-controlled wallets.</p>
+        <p>Main Ethereum transaction at 8:24 p.m. UTC (64 transfers combined).</p>
+      </div>
+    </div>
+    <div class="ev" onclick="this.classList.toggle('open')">
+      <span class="hint">[+] details</span>
+      <div class="t">29 OCT · 21:01–21:03 UTC</div>
+      <div class="h">Tether and Circle freeze the first wallets</div>
+      <div class="d"><p>Tether froze wallets at 9:01 p.m. UTC; Circle followed about three minutes later.</p></div>
+    </div>
+    <div class="ev" onclick="this.classList.toggle('open')">
+      <span class="hint">[+] details</span>
+      <div class="t">29 OCT · 22:06 & 23:53 UTC</div>
+      <div class="h">Binance hot wallet blocked by issuers</div>
+      <div class="d"><p>Tether blocked Binance's hot wallet at 10:06 p.m. UTC; Circle at 11:53 p.m. UTC.</p></div>
+    </div>
+    <div class="ev" onclick="this.classList.toggle('open')">
+      <span class="hint">[+] details</span>
+      <div class="t">29 OCT · 23:05–23:56 UTC</div>
+      <div class="h">Follow-on attacks on Avalanche, Polygon, Ethereum</div>
+      <div class="d"><p>Further transactions at 11:05 p.m. UTC (Avalanche, Polygon); final Ethereum transaction at 11:56 p.m. UTC.</p></div>
+    </div>
+    <div class="ev" onclick="this.classList.toggle('open')">
+      <span class="hint">[+] details</span>
+      <div class="t">29 OCT · 24:10 UTC</div>
+      <div class="h">Binance revokes hacker hot-wallet permissions</div>
+      <div class="d"><p>Binance removed the attackers' hot-wallet permissions at 12:10 a.m. UTC on 30 October. Trading halted, withdrawals suspended; Binance said user funds were "completely safe" and it would cover losses.</p></div>
+    </div>
+    <div class="ev" onclick="this.classList.toggle('open')">
+      <span class="hint">[+] details</span>
+      <div class="t">30 OCT 2026</div>
+      <div class="h">$6B earmarked from reserves</div>
+      <div class="d"><p>Binance said it had set aside $6B from its Secure Asset Fund, Futures Insurance Fund, Bitcoin reserve and corporate treasury, to buy tokens and cover losses. 17,260 ETH moved to a new wallet at 5:15 a.m. UTC.</p></div>
+    </div>
+    <div class="ev" onclick="this.classList.toggle('open')">
+      <span class="hint">[+] details</span>
+      <div class="t">31 OCT 2026</div>
+      <div class="h">Binance reports 90% of losses replenished · FBI attributes to North Korea</div>
+      <div class="d"><p>Reuters reports Binance says 90% of stolen assets were replenished; the remaining 10% described as less-liquid tokens. An FBI Cyber alert (titled "North Korea Responsible for $6 Billion+ Binance Attack") is dated the same day.</p></div>
+    </div>
+    <div class="ev" onclick="this.classList.toggle('open')">
+      <span class="hint">[+] details</span>
+      <div class="t">1 NOV 2026 · 06:00 UTC</div>
+      <div class="h">Withdrawals resume on all 15 blockchains</div>
+      <div class="d"><p>Started with Ethereum, USDT, USDC and some BNB Chain tokens, then Dogecoin and Solana. Withdrawals processed: $4.65B; deposits: $1.01B; net outflow: $3.6B (CNBC, 2 Nov).</p></div>
+    </div>
+    <div class="ev" onclick="this.classList.toggle('open')">
+      <span class="hint">[+] details</span>
+      <div class="t">2 NOV 2026</div>
+      <div class="h">USD and AED withdrawals reopen</div>
+      <div class="d"><p>DefiLlama data cited by Wikipedia shows net outflow of ~$4.9B by the morning, about 3% of total assets. Binance said ~5% of tokens still needed to be bought to reimburse customers.</p></div>
+    </div>
+    <div class="ev" onclick="this.classList.toggle('open')">
+      <span class="hint">[+] details</span>
+      <div class="t">3 NOV 2026</div>
+      <div class="h">Binance says 98% replenished · North Korea denies involvement</div>
+      <div class="d"><p>Binance reports 98% of stolen tokens replenished (company figure). Kim Yo Jong (WPK) denies North Korean involvement via KCNA, calling it a US smear, and also denies involvement in the 2025 Bybit hack. Binance's own report points to a months-long social-engineering campaign (see section 06).</p></div>
+    </div>
+    <div class="ev" onclick="this.classList.toggle('open')">
+      <span class="hint">[+] details</span>
+      <div class="t">~8 NOV 2026</div>
+      <div class="h">CFO departs</div>
+      <div class="d"><p>Nairametrics reports Binance announced the departure of its Chief Financial Officer, Kaiser Ng, days after the theft. Not mentioned in the Wikipedia article, so treat as single-source until corroborated.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 chains -->
+<section id="chains">
+  <h2>03 <span>//</span> chains affected <span>(USD billions, hover bars)</span></h2>
+  <div class="grid two">
+    <div class="card">
+      <h3>Loss by blockchain</h3>
+      <div class="btns" id="chainModeBtns">
+        <button class="on" data-mode="bar">bar</button>
+        <button data-mode="log">log scale</button>
+      </div>
+      <svg id="chainChart" viewBox="0 0 560 380" width="100%" role="img" aria-label="Loss by blockchain"></svg>
+      <div class="note">Values from the Wikipedia table. Summed, they total ~$6.40B; the article's narrative figure is $6.36B (rounding).</div>
+    </div>
+    <div class="card">
+      <h3>Share of total</h3>
+      <svg id="chainDonut" viewBox="0 0 360 360" width="100%" role="img" aria-label="Share by chain"></svg>
+      <div class="legend" id="chainLegend"></div>
+    </div>
+  </div>
+  <div class="tbl-wrap" style="margin-top:14px">
+    <table>
+      <thead><tr><th>Chain</th><th class="num">USD (B)</th><th>Share</th><th>Notes</th></tr></thead>
+      <tbody id="chainTable"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 04 fund status -->
+<section id="funds">
+  <h2>04 <span>//</span> fund status <span>(as of 30 Oct)</span></h2>
+  <div class="grid two">
+    <div class="card">
+      <h3>Where the $6.3B sits</h3>
+      <svg id="fundDonut" viewBox="0 0 360 300" width="100%" role="img" aria-label="Fund status"></svg>
+      <div class="legend">
+        <span><b style="background:var(--accent)"></b>frozen ~$3.0B</span>
+        <span><b style="background:var(--accent-2)"></b>unfreezable BTC $1.5B</span>
+        <span><b style="background:var(--danger)"></b>with attackers $1.8B</span>
+      </div>
+      <div class="note">Per the status table reported in Wikipedia. Attackers spread funds across roughly 12,000 wallets (Elliptic). As of 30 Oct none had been converted to fiat.</div>
+    </div>
+    <div class="card">
+      <h3>Frozen-amount estimates</h3>
+      <div class="bar-h" style="margin:10px 0 4px"><i style="width:100%"></i></div>
+      <div class="note">Binance ~$3.0B · Chainalysis ~$2.8B · TRM Labs ~$2.7B. Binance also said it had frozen or intercepted up to $2.9B (Forbes).</div>
+      <div class="warnbox" style="margin-top:14px">Why it matters: stablecoins are freezable by issuers (Tether, Circle). Native BTC is not, which explains why the $1.5B BTC leg is the unrecoverable core of the loss unless the attackers move it through a freezable rail.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 recovery -->
+<section id="recovery">
+  <h2>05 <span>//</span> recovery & response</h2>
+  <div class="grid two">
+    <div class="card">
+      <h3>Withdrawal flows, 1–2 Nov (USD B)</h3>
+      <div class="btns" id="flowBtns">
+        <button class="on" data-k="all">all</button>
+        <button data-k="w">withdrawals</button>
+        <button data-k="d">deposits</button>
+        <button data-k="n">net</button>
+      </div>
+      <svg id="flowChart" viewBox="0 0 560 300" width="100%" role="img" aria-label="Withdrawal flows"></svg>
+      <div class="note">Reported by CNBC (2 Nov). Net outflow later cited at $4.9B by DefiLlama (morning of 2 Nov).</div>
+    </div>
+    <div class="card">
+      <h3>Replenishment progress (company claims)</h3>
+      <svg id="repChart" viewBox="0 0 560 300" width="100%" role="img" aria-label="Replenishment"></svg>
+      <div class="note">Company-reported coverage, not independently audited. Reuters (31 Oct) reports 90%; Binance (via NYT, 3 Nov) reports 98%.</div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h3>Immediate response actions</h3>
+    <div class="flow">
+      <div class="step"><div class="n">T+0 · 29 OCT</div><div class="ttl">Halt & suspend</div><div class="b">Trading paused, deposits and withdrawals suspended across chains.</div></div>
+      <div class="step"><div class="n">T+~4h</div><div class="ttl">Revoke hot-wallet rights</div><div class="b">Attacker permissions removed at 12:10 a.m. UTC.</div></div>
+      <div class="step"><div class="n">T+1 DAY</div><div class="ttl">Reserve backstop</div><div class="b">$6B from insurance and reserve funds to buy tokens and reimburse.</div></div>
+      <div class="step"><div class="n">T+2 DAYS</div><div class="ttl">Staged reopening</div><div class="b">Withdrawals on 15 chains from 1 Nov; fiat rails from 2 Nov.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 attack vector -->
+<section id="vector">
+  <h2>06 <span>//</span> attack vector <span>(as reported, not yet a full post-mortem)</span></h2>
+  <div class="flow">
+    <div class="step"><div class="n">STAGE 01</div><div class="ttl">Recruitment lure</div><div class="b">A Binance software engineer is contacted by "a person posing as a Project Director" via a job platform, with fake interviews and video calls.</div></div>
+    <div class="step"><div class="n">STAGE 02</div><div class="ttl">Malware on workstation</div><div class="b">Malicious code gives remote access to the engineer's laptop, with the ability to deploy software.</div></div>
+    <div class="step"><div class="n">STAGE 03</div><div class="ttl">Internal AI tool abused</div><div class="b">A compromised internal AI tool is reportedly used to reach the wallet-signing service.</div></div>
+    <div class="step warn"><div class="n">STAGE 04</div><div class="ttl">Hot-wallet authority abused</div><div class="b">Attackers grant network permissions directly on Ethereum (EIP-7702 delegation, per CEO Richard Teng via BBC), so halting withdrawals did not stop the drain.</div></div>
+    <div class="step warn"><div class="n">STAGE 05</div><div class="ttl">Multi-chain drain</div><div class="b">~20 min across 10 chains; ~12,000 wallets used to dilute freezes.</div></div>
+  </div>
+  <div class="warnbox" style="margin-top:14px">
+    Binance says its investigation "uncovered additional points of breach" beyond the initial laptop. TRM Labs says preparation started at least 36 hours before the theft. No full technical post-mortem has been published as of this writing. Treat the stages above as reported, not confirmed.
+  </div>
+</section>
+
+<!-- 07 attribution -->
+<section id="attrib">
+  <h2>07 <span>//</span> attribution</h2>
+  <div class="grid two">
+    <div class="card">
+      <h3>Who is blamed</h3>
+      <table>
+        <tbody>
+          <tr><td>FBI</td><td>Attributes to North Korea-sponsored TraderTraitor (Cyber alert, 31 Oct)</td></tr>
+          <tr><td>TRM Labs</td><td>Links to North Korean state-linked actors; ties to the 2025 Bybit hack</td></tr>
+          <tr><td>Chainalysis</td><td>Assesses likely TraderTraitor</td></tr>
+          <tr><td>Wikipedia</td><td>TraderTraitor "appears to be part of the Lazarus Group"</td></tr>
+          <tr><td>US Secret Service</td><td>Tracking, freezing and recovery effort</td></tr>
+          <tr><td>UK FCA</td><td>Investigating; notes Binance is not registered to offer crypto services in the UK</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3>Denials & caveats</h3>
+      <p>North Korea's Kim Yo Jong, via KCNA (3 Nov), denies involvement and calls the accusation a US smear. Spelling of the group varies (TraderTraitor vs TraitorTrader).</p>
+      <p class="note">Attribution is based on on-chain analysis and government statements. It is not a court finding.</p>
+      <div class="warnbox">Caution: the FBI alert's content has not been independently read by this dossier, only its title and the way Wikipedia describes it.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 discrepancies -->
+<section id="discrep">
+  <h2>08 <span>//</span> where sources disagree</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Metric</th><th>Values reported</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>Total stolen</td><td>$6.3B · $6.36B · $6.4B</td><td>Rounding and estimate method; one researcher ~$6.43B</td></tr>
+        <tr><td>Frozen</td><td>Binance ~$3.0B · Chainalysis ~$2.8B · TRM ~$2.7B · Binance "up to $2.9B" (Forbes)</td><td>Euronews headline cites "more than $25bn frozen"; this figure appears erroneous and is not used here</td></tr>
+        <tr><td>Start time</td><td>8:05 p.m. UTC (TRM) vs ~8:20 p.m. UTC (Chainalysis)</td><td>Different clocks/first-tx definitions</td></tr>
+        <tr><td>Chains</td><td>"10 blockchains" (attack) vs "15 blockchains" (withdrawals)</td><td>10 drained; 15 supported for withdrawals</td></tr>
+        <tr><td>Coverage</td><td>90% (31 Oct) vs 98% (3 Nov)</td><td>Both company-reported</td></tr>
+        <tr><td>Net outflow</td><td>$3.6B (CNBC, 2 Nov) vs $4.9B (DefiLlama, 2 Nov)</td><td>Different snapshot times</td></tr>
+        <tr><td>Leadership</td><td>CFO departure (Nairametrics) vs none mentioned (Wikipedia)</td><td>Single-source</td></tr>
+        <tr><td>Headline size</td><td>Many headlines say "$6B"</td><td>Use $6.3B for the figure with the most sources</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 09 sources -->
+<section id="sources">
+  <h2>09 <span>//</span> sources</h2>
+  <p class="note">Each link is listed with how it was reached. <span class="ok">READ</span> = page content was retrieved directly. <span class="flag">SEARCH</span> = seen in search results, not separately opened. <span class="flag">UNVERIFIED</span> = retrieval failed or not yet checked.</p>
+  <ol class="src">
+    <li><div><a href="https://en.wikipedia.org/wiki/2026_Binance_hack" target="_blank" rel="noopener">2026 Binance hack — Wikipedia</a><span class="ok">READ</span><span class="meta">Primary summary used for timeline, chain table, fund status, and recovery; its own references are listed below.</span></div></li>
+    <li><div><a href="https://www.cnbc.com/2026/10/30/billions-in-crypto-frozen-in-binance-hack-heres-what-happens-next-.html" target="_blank" rel="noopener">Binance's $6.3 billion hack: What we know and what comes next — CNBC, 30 Oct 2026</a><span class="flag">SEARCH</span></div></li>
+    <li><div><a href="https://www.cnbc.com/2026/10/29/circle-tether-freeze-funds-impacted-by-potential-binance-security-issue.html" target="_blank" rel="noopener">$6.3 billion Binance hack is largest crypto theft on record — CNBC, 29 Oct 2026</a><span class="flag">SEARCH</span></div></li>
+    <li><div><a href="https://www.cnbc.com/2026/10/31/binance-hack-asset-coverage-withdrawals.html" target="_blank" rel="noopener">Binance resumes withdrawals following $6.3 billion hack, says 90% of stolen user assets are covered — CNBC, 31 Oct 2026</a><span class="flag">SEARCH</span></div></li>
+    <li><div><a href="https://www.cnbc.com/2026/11/02/binance-outflow-hack-bitcoin.html" target="_blank" rel="noopener">Binance outflow and hack coverage — CNBC, 2 Nov 2026</a><span class="flag">SEARCH</span><span class="meta">Cited by Wikipedia for withdrawal/deposit flows.</span></div></li>
+    <li><div><a href="https://www.npr.org/2026/10/31/nx-s1-6024426/binance-crypto-heist-cyber-criminals-north-korea" target="_blank" rel="noopener">A simple explainer of the massive $6.3 billion crypto heist at Binance — NPR, 31 Oct 2026</a><span class="flag">SEARCH</span></div></li>
+    <li><div><a href="https://www.cnn.com/2026/11/01/business/binance-withdrawals-crypto-heist" target="_blank" rel="noopener">Binance withdrawals resume following $6 billion hack — CNN, 1 Nov 2026</a><span class="flag">SEARCH</span></div></li>
+    <li><div><a href="https://www.bloomberg.com/news/articles/2026-10-29/binance-founder-says-possible-hack-of-exchange-bitcoin-falls" target="_blank" rel="noopener">Binance Suspends Deposits, Withdrawals After $6.3 Billion Hack — Bloomberg, 29 Oct 2026</a><span class="flag">SEARCH</span></div></li>
+    <li><div><a href="https://www.theguardian.com/business/2026/oct/30/crypto-heist-binance-who-did-it-are-investments-safe" target="_blank" rel="noopener">Crypto heist at Binance: who did it and are investments safe? — The Guardian, 30 Oct 2026</a><span class="flag">SEARCH</span></div></li>
+    <li><div><a href="https://www.theguardian.com/business/2026/nov/01/binance-losses-covered-hack-fbi-north-korea-cryptocurrency" target="_blank" rel="noopener">Binance losses covered; FBI blames North Korea — The Guardian, 1 Nov 2026</a><span class="flag">SEARCH</span></div></li>
+    <li><div><a href="https://www.bbc.com/news/articles/c6rey4v53exgo" target="_blank" rel="noopener">North Korea denial — BBC, 3 Nov 2026</a><span class="flag">SEARCH</span></div></li>
+    <li><div><a href="https://www.bbc.co.uk/news/articles/ckpdg3ql4169o" target="_blank" rel="noopener">Binance 90% replenished — BBC, 31 Oct 2026</a><span class="flag">SEARCH</span></div></li>
+    <li><div><a href="https://www.reuters.com/legal/government/binance-says-90-stolen-assets-replenished-2026-10-31/" target="_blank" rel="noopener">Binance says 90% of stolen assets replenished — Reuters, 31 Oct 2026</a><span class="flag">SEARCH</span></div></li>
+    <li><div><a href="https://www.nytimes.com/2026/11/03/technology/binance-hack-report.html" target="_blank" rel="noopener">Binance hack report — The New York Times, 3 Nov 2026</a><span class="flag">SEARCH</span><span class="meta">Source for Binance's 98% figure and its social-engineering account.</span></div></li>
+    <li><div><a href="https://www.forbes.com/sites/digital-assets/2026/11/03/the-63-billion-binance-hack-exposes-cryptos-biggest-internal-control-problem/" target="_blank" rel="noopener">The $6.3 Billion Binance Hack Exposes Crypto's Biggest Internal Control Problem — Forbes, 3 Nov 2026</a><span class="flag">SEARCH</span></div></li>
+    <li><div><a href="https://www.fbi.gov/investigate/cyber/alerts/2026/north-korea-responsible-for-6-billion-binance-attack" target="_blank" rel="noopener">FBI Cyber alert: North Korea Responsible for $6 Billion+ Binance Attack — 31 Oct 2026</a><span class="flag">UNVERIFIED</span><span class="meta">Cited by Wikipedia; not opened.</span></div></li>
+    <li><div><a href="http://kcna.kp/en/article/detail/873496f71f6ab3e667a4271b5a4cf4c6" target="_blank" rel="noopener">KCNA: Kim Yo Jong statement — 3 Nov 2026</a><span class="flag">UNVERIFIED</span><span class="meta">Cited by Wikipedia; not opened.</span></div></li>
+    <li><div><a href="https://nairametrics.com/2026/11/08/binance-cfo-resigns-following-6-3-billion-cryptocurrency-hack/" target="_blank" rel="noopener">Binance CFO resigns following $6.3 billion cryptocurrency hack — Nairametrics, 8 Nov 2026</a><span class="flag">SEARCH</span></div></li>
+    <li><div><a href="https://thehackernews.com/2026/10/binance-suffers-security-breach.html" target="_blank" rel="noopener">Binance Suffers Security Breach Affecting $6.3 Billion in Assets — The Hacker News, Oct 2026</a><span class="flag">UNVERIFIED</span><span class="meta">Retrieval returned HTTP 403; not read.</span></div></li>
+  </ol>
+</section>
+
+<footer>
+  Compiled from public reporting and company statements. Company-reported figures (coverage percentages, reserve sources) have not been independently audited. Attribution reflects analyst and government assessments, not court findings. This dossier is informational, not financial or legal advice.
+</footer>
+</div>
+
+<div class="tip" id="tip"></div>
+
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  var tip = document.getElementById("tip");
+  function showTip(e, html) {
+    tip.innerHTML = html; tip.classList.add("on");
+    moveTip(e);
+  }
+  function moveTip(e) {
+    tip.style.left = Math.min(e.clientX + 14, window.innerWidth - 280) + "px";
+    tip.style.top = (e.clientY + 14) + "px";
+  }
+  function hideTip() { tip.classList.remove("on"); }
+  function el(tag, attrs, parent) {
+    var n = document.createElementNS(NS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function txt(parent, x, y, s, attrs) {
+    var t = el("text", Object.assign({ x: x, y: y, fill: "#5d8a78", "font-size": 11 }, attrs || {}), parent);
+    t.textContent = s; return t;
+  }
+
+  // ---- chain data (USD B, Wikipedia table) ----
+  var chains = [
+    { name: "Ethereum", v: 3.8, color: "#39ff88", note: "Main drain; 64 transfers at 8:24 p.m. UTC; 17,260 ETH moved 30 Oct" },
+    { name: "Bitcoin", v: 1.5, color: "#ffb000", note: "18,270 BTC; not freezable by issuers" },
+    { name: "Tron", v: 0.628, color: "#ff3b5c", note: "Mostly stablecoins" },
+    { name: "XRP Ledger", v: 0.296, color: "#00d4ff", note: "Where TRM dates the start (~8:05 p.m. UTC)" },
+    { name: "Solana", v: 0.096, color: "#c084fc", note: "" },
+    { name: "Arb / OP / Base", v: 0.039, color: "#7dd3fc", note: "Combined L2 total" },
+    { name: "Avalanche", v: 0.028, color: "#fb7185", note: "Attacked 11:05 p.m. UTC" },
+    { name: "Polygon", v: 0.010, color: "#a3e635", note: "Attacked 11:05 p.m. UTC" }
+  ];
+  var total = chains.reduce(function (a, c) { return a + c.v; }, 0);
+
+  // chain bar chart
+  var cSvg = document.getElementById("chainChart");
+  var mode = "bar";
+  function drawChains() {
+    cSvg.innerHTML = "";
+    var W = 560, H = 380, padL = 110, padR = 60, padT = 14, padB = 30;
+    var max = chains[0].v;
+    var rowH = (H - padT - padB) / chains.length;
+    chains.forEach(function (c, i) {
+      var y = padT + i * rowH + rowH * 0.2;
+      var h = rowH * 0.6;
+      var frac = mode === "bar" ? c.v / max : Math.max(0.02, (Math.log10(c.v * 1000 + 1)) / Math.log10(max * 1000 + 1));
+      var w = (W - padL - padR) * frac;
+      txt(cSvg, padL - 8, y + h / 2 + 4, c.name, { "text-anchor": "end", fill: "#b7f7d0" });
+      var r = el("rect", { x: padL, y: y, width: 0, height: h, fill: c.color, opacity: 0.85, rx: 0 }, cSvg);
+      r.style.transition = "width .6s cubic-bezier(.2,.8,.2,1)";
+      setTimeout(function () { r.setAttribute("width", w); }, 20 + i * 40);
+      txt(cSvg, padL + w + 6, y + h / 2 + 4, "$" + c.v.toFixed(c.v < 1 ? 3 : 2) + "B", { fill: "#b7f7d0" });
+      r.addEventListener("mousemove", function (e) {
+        showTip(e, "<b>" + c.name + "</b><br>$" + c.v + "B · " + (c.v / total * 100).toFixed(1) + "% of total<br><span style='color:#5d8a78'>" + c.note + "</span>");
+      });
+      r.addEventListener("mouseleave", hideTip);
+    });
+    txt(cSvg, padL, H - 8, mode === "bar" ? "linear scale, USD billions" : "log-scaled bar length (values preserved in labels)");
+  }
+  drawChains();
+  document.querySelectorAll("#chainModeBtns button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      mode = b.getAttribute("data-mode");
+      document.querySelectorAll("#chainModeBtns button").forEach(function (x) { x.classList.toggle("on", x === b); });
+      drawChains();
+    });
+  });
+
+  // donut helper
+  function donut(svgId, parts, cx, cy, rOut, rIn, centerLabel, centerSub) {
+    var svg = document.getElementById(svgId);
+    svg.innerHTML = "";
+    var sum = parts.reduce(function (a, p) { return a + p.v; }, 0);
+    var ang = -Math.PI / 2;
+    parts.forEach(function (p) {
+      var a2 = ang + (p.v / sum) * Math.PI * 2;
+      var large = (a2 - ang) > Math.PI ? 1 : 0;
+      var x1 = cx + rOut * Math.cos(ang), y1 = cy + rOut * Math.sin(ang);
+      var x2 = cx + rOut * Math.cos(a2), y2 = cy + rOut * Math.sin(a2);
+      var x3 = cx + rIn * Math.cos(a2), y3 = cy + rIn * Math.sin(a2);
+      var x4 = cx + rIn * Math.cos(ang), y4 = cy + rIn * Math.sin(ang);
+      var d = "M" + x1 + " " + y1 + " A" + rOut + " " + rOut + " 0 " + large + " 1 " + x2 + " " + y2 +
+              " L" + x3 + " " + y3 + " A" + rIn + " " + rIn + " 0 " + large + " 0 " + x4 + " " + y4 + " Z";
+      var path = el("path", { d: d, fill: p.color, stroke: "#05080a", "stroke-width": 2, opacity: 0.9 }, svg);
+      path.style.cursor = "pointer";
+      path.addEventListener("mouseenter", function () { path.setAttribute("opacity", 1); });
+      path.addEventListener("mouseleave", function () { path.setAttribute("opacity", 0.9); hideTip(); });
+      path.addEventListener("mousemove", function (e) {
+        showTip(e, "<b>" + p.name + "</b><br>$" + p.v + "B · " + (p.v / sum * 100).toFixed(1) + "%");
+      });
+      ang = a2;
+    });
+    var c1 = txt(svg, cx, cy + 2, centerLabel, { "text-anchor": "middle", fill: "#39ff88", "font-size": 22 });
+    txt(svg, cx, cy + 22, centerSub, { "text-anchor": "middle", "font-size": 11 });
+  }
+
+  donut("chainDonut", chains.map(function (c) { return { name: c.name, v: c.v, color: c.color }; }),
+        180, 180, 150, 96, "$6.4B", "sum of chains");
+  document.getElementById("chainLegend").innerHTML = chains.map(function (c) {
+    return "<span><b style='background:" + c.color + "'></b>" + c.name + "</span>";
+  }).join("");
+
+  // chain table
+  document.getElementById("chainTable").innerHTML = chains.map(function (c) {
+    var pct = (c.v / total * 100);
+    return "<tr><td>" + c.name + "</td><td class='num'>" + c.v.toFixed(c.v < 1 ? 3 : 2) +
+      "</td><td><div class='bar-h'><i style='width:" + pct.toFixed(1) + "%'></i></div></td><td>" + (c.note || "—") + "</td></tr>";
+  }).join("");
+
+  // fund donut
+  donut("fundDonut", [
+    { name: "Frozen (stablecoins)", v: 3.0, color: "#39ff88" },
+    { name: "BTC, unfreezable", v: 1.5, color: "#00d4ff" },
+    { name: "Remains with attackers", v: 1.8, color: "#ff3b5c" }
+  ], 180, 150, 120, 74, "$6.3B", "status 30 Oct");
+
+  // flow chart (grouped bars with toggles)
+  var flowData = [
+    { k: "w", label: "Withdrawals", v: 4.65, color: "#ffb000" },
+    { k: "d", label: "Deposits", v: 1.01, color: "#39ff88" },
+    { k: "n", label: "Net outflow", v: 3.6, color: "#ff3b5c" }
+  ];
+  var flowSel = "all";
+  function drawFlow() {
+    var svg = document.getElementById("flowChart");
+    svg.innerHTML = "";
+    var W = 560, H = 300, padL = 50, padB = 40, padT = 20;
+    var items = flowData.filter(function (d) { return flowSel === "all" || flowSel === d.k; });
+    var max = 5;
+    var plotH = H - padT - padB;
+    for (var g = 0; g <= 5; g++) {
+      var y = padT + plotH - (g / 5) * plotH;
+      el("line", { x1: padL, x2: W - 10, y1: y, y2: y, stroke: "#15303a" }, svg);
+      txt(svg, padL - 8, y + 4, "$" + g + "B", { "text-anchor": "end" });
+    }
+    var slot = (W - padL - 20) / items.length;
+    items.forEach(function (d, i) {
+      var bh = (d.v / max) * plotH;
+      var x = padL + i * slot + slot * 0.2;
+      var r = el("rect", { x: x, y: padT + plotH, width: slot * 0.6, height: 0, fill: d.color, opacity: 0.85 }, svg);
+      setTimeout(function () { r.setAttribute("y", padT + plotH - bh); r.setAttribute("height", bh); }, 30 + i * 80);
+      r.style.transition = "all .5s ease";
+      txt(svg, x + slot * 0.3, padT + plotH - bh - 6, "$" + d.v.toFixed(2) + "B", { fill: "#b7f7d0", "text-anchor": "middle" });
+      txt(svg, x + slot * 0.3, H - 18, d.label, { "text-anchor": "middle", fill: "#b7f7d0" });
+      r.addEventListener("mousemove", function (e) { showTip(e, "<b>" + d.label + "</b><br>$" + d.v + "B"); });
+      r.addEventListener("mouseleave", hideTip);
+    });
+  }
+  drawFlow();
+  document.querySelectorAll("#flowBtns button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      flowSel = b.getAttribute("data-k");
+      document.querySelectorAll("#flowBtns button").forEach(function (x) { x.classList.toggle("on", x === b); });
+      drawFlow();
+    });
+  });
+
+  // replenishment: 90% vs 98% claims, plus 100% goal
+  (function () {
+    var svg = document.getElementById("repChart");
+    svg.innerHTML = "";
+    var rows = [
+      { label: "31 Oct (Reuters)", v: 90, color: "#ffb000" },
+      { label: "3 Nov (Binance, via NYT)", v: 98, color: "#39ff88" }
+    ];
+    var W = 560, padL = 190, barW = W - padL - 60;
+    rows.forEach(function (r, i) {
+      var y = 40 + i * 70;
+      txt(svg, padL - 10, y + 22, r.label, { "text-anchor": "end", fill: "#b7f7d0" });
+      el("rect", { x: padL, y: y, width: barW, height: 30, fill: "#0d171e", stroke: "#15303a" }, svg);
+      var bar = el("rect", { x: padL, y: y, width: 0, height: 30, fill: r.color, opacity: .85 }, svg);
+      setTimeout(function () { bar.setAttribute("width", barW * r.v / 100); }, 80 + i * 150);
+      bar.style.transition = "width .8s ease";
+      txt(svg, padL + barW + 8, y + 20, r.v + "%", { fill: r.color, "font-size": 14 });
+      bar.addEventListener("mousemove", function (e) { showTip(e, "<b>" + r.label + "</b><br>" + r.v + "% replenished (company claim)"); });
+      bar.addEventListener("mouseleave", hideTip);
+    });
+    txt(svg, padL, 200, "0%", { "text-anchor": "middle" });
+    txt(svg, padL + barW, 200, "100%", { "text-anchor": "middle" });
+    txt(svg, W / 2, 240, "Company-reported; the remaining share described as less-liquid tokens (Reuters).", { "text-anchor": "middle" });
+  })();
+
+  // escape-to-close helper
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") hideTip(); });
+})();
+</script>
+</body>
+</html>
